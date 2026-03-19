@@ -1,0 +1,901 @@
+/* ============================================================
+   CONSPIRACY PARODY SITE — style.css
+   ============================================================ */
+
+:root {
+  --red: #cc0000;
+  --yellow: #f5c518;
+  --paper: #e8dfc0;
+  --dark-paper: #c4b89a;
+  --ink: #1a1207;
+  --pin: #8b1a1a;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #111;
+  font-family: 'Courier Prime', monospace;
+  overflow-x: hidden;
+  cursor: crosshair;
+}
+
+/* SCANLINES */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.15) 2px,
+    rgba(0,0,0,0.15) 4px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+
+.site-header {
+  background: #000;
+  border-bottom: 3px solid var(--red);
+  padding: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.header-tape {
+  background: var(--yellow);
+  color: #000;
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  letter-spacing: 3px;
+  padding: 4px 0;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.header-tape span {
+  display: inline-block;
+  animation: marquee 18s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(100vw); }
+  100% { transform: translateX(-100%); }
+}
+
+.header-main {
+  text-align: center;
+  padding: 30px 20px 20px;
+  position: relative;
+}
+
+.header-main h1 {
+  font-family: 'Special Elite', serif;
+  font-size: clamp(28px, 5vw, 64px);
+  color: var(--red);
+  text-shadow: 3px 3px 0 #000, 0 0 30px rgba(200,0,0,0.4);
+  letter-spacing: 4px;
+  line-height: 1.1;
+  animation: flicker 4s infinite;
+}
+
+@keyframes flicker {
+  0%,94%,96%,98%,100% { opacity: 1; }
+  95%,97%              { opacity: 0.6; }
+}
+
+.header-main .subtitle {
+  font-family: 'VT323', monospace;
+  color: var(--yellow);
+  font-size: 20px;
+  letter-spacing: 6px;
+  margin-top: 8px;
+  text-transform: uppercase;
+}
+
+.classified-stamp {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  border: 4px solid var(--red);
+  color: var(--red);
+  padding: 6px 12px;
+  font-family: 'Special Elite', serif;
+  font-size: 18px;
+  letter-spacing: 4px;
+  transform: rotate(15deg);
+  opacity: 0.85;
+  text-shadow: 0 0 8px rgba(200,0,0,0.5);
+  animation: stampPulse 2s ease-in-out infinite;
+}
+
+@keyframes stampPulse {
+  0%,100% { opacity: 0.85; }
+  50%     { opacity: 0.5; }
+}
+
+.visitor-bar {
+  background: #0a0a0a;
+  border-top: 1px solid #333;
+  padding: 6px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  color: #0f0;
+}
+
+/* ============================================================
+   CORK BOARD
+   ============================================================ */
+
+.corkboard {
+  background:
+    radial-gradient(circle at 20% 40%, rgba(139,90,43,0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 60%, rgba(100,60,20,0.3) 0%, transparent 50%),
+    linear-gradient(135deg, #7a5c2e 0%, #8b6914 30%, #6b4f1e 60%, #7a5c2e 100%);
+  min-height: 100vh;
+  padding: 40px 20px;
+  position: relative;
+}
+
+.strings-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.board-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   LAYOUT GRIDS
+   ============================================================ */
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 40px;
+  margin-bottom: 30px;
+  position: relative;
+  z-index: 2;
+}
+
+.logic-side {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* ============================================================
+   ROTATION HELPERS
+   ============================================================ */
+
+.rotate-1 { transform: rotate(-2deg); }
+.rotate-2 { transform: rotate(1.5deg); }
+.rotate-3 { transform: rotate(-1deg); }
+.rotate-4 { transform: rotate(3deg); }
+.rotate-5 { transform: rotate(-3deg); }
+.rotate-6 { transform: rotate(0.8deg); }
+
+/* ============================================================
+   PINS (shared ::before pseudo)
+   ============================================================ */
+
+.note-card::before,
+.photo-card::before,
+.headline-card::before,
+.logic-chain::before,
+.countdown-card::before,
+.conspiracy-meter::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  background: radial-gradient(circle at 40% 35%, #ff6b6b, var(--pin));
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  z-index: 10;
+}
+
+.note-card.pin-yellow::before { background: radial-gradient(circle at 40% 35%, #ffe066, #c8a000); }
+.note-card.pin-blue::before   { background: radial-gradient(circle at 40% 35%, #6bb8ff, #0044aa); }
+.note-card.pin-green::before  { background: radial-gradient(circle at 40% 35%, #6bffaa, #006633); }
+.logic-chain::before          { background: radial-gradient(circle at 40% 35%, #6bffaa, #006633); }
+.conspiracy-meter::before     { background: radial-gradient(circle at 40% 35%, #ffe066, #c8a000); }
+
+/* ============================================================
+   NOTE CARDS
+   ============================================================ */
+
+.note-card {
+  background: var(--paper);
+  border: 1px solid var(--dark-paper);
+  padding: 20px;
+  position: relative;
+  box-shadow: 4px 6px 15px rgba(0,0,0,0.5), inset 0 0 60px rgba(0,0,0,0.05);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.note-card:hover {
+  transform: scale(1.02) rotate(0deg) !important;
+  box-shadow: 8px 12px 25px rgba(0,0,0,0.7);
+  z-index: 100 !important;
+}
+
+.note-card h3 {
+  font-family: 'Special Elite', serif;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--dark-paper);
+  padding-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.note-card p,
+.note-card li {
+  font-size: 13px;
+  color: #2a1f10;
+  line-height: 1.6;
+}
+
+.note-card ul { padding-left: 16px; }
+
+.evidence-number {
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-family: 'VT323', monospace;
+  font-size: 28px;
+  color: var(--red);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   STICKY NOTE
+   ============================================================ */
+
+.sticky {
+  background: #ffef8a;
+  padding: 16px;
+  box-shadow: 3px 5px 10px rgba(0,0,0,0.4);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sticky::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px; height: 16px;
+  background: radial-gradient(circle at 40% 35%, #ff6b6b, var(--pin));
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+  z-index: 10;
+}
+
+.sticky:hover {
+  transform: scale(1.02) rotate(0deg) !important;
+  box-shadow: 8px 12px 25px rgba(0,0,0,0.7);
+  z-index: 100 !important;
+}
+
+.sticky p {
+  font-family: 'Courier Prime', monospace;
+  font-size: 13px;
+  color: #333;
+  line-height: 1.6;
+}
+
+/* ============================================================
+   PHOTO CARDS
+   ============================================================ */
+
+.photo-card {
+  background: #fff;
+  padding: 10px 10px 40px;
+  box-shadow: 4px 6px 15px rgba(0,0,0,0.5);
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.photo-card:hover {
+  transform: scale(1.04) rotate(0deg) !important;
+  z-index: 100 !important;
+}
+
+.photo-placeholder {
+  width: 100%;
+  height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+  position: relative;
+  overflow: hidden;
+}
+
+.photo-bg-1 { background: linear-gradient(135deg, #2a4a2a, #3a5a3a); }
+.photo-bg-2 { background: linear-gradient(135deg, #1a1a3a, #2a2a5a); }
+.photo-bg-3 { background: linear-gradient(135deg, #3a2a1a, #5a3a2a); }
+.photo-bg-4 { background: linear-gradient(135deg, #2a1a1a, #4a2a2a); }
+.photo-bg-5 { background: linear-gradient(135deg, #1a2a1a, #2a4a2a); }
+
+.photo-caption {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #333;
+  text-align: center;
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.photo-arrow {
+  position: absolute;
+  color: var(--red);
+  font-size: 20px;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 5;
+}
+
+.zoom-icon {
+  position: absolute;
+  bottom: 50px;
+  right: 14px;
+  color: rgba(255,255,255,0.6);
+  font-size: 18px;
+}
+
+/* ============================================================
+   HEADLINE CARDS
+   ============================================================ */
+
+.headline-card {
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 15px;
+  position: relative;
+  box-shadow: 4px 6px 15px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.headline-card:hover {
+  transform: scale(1.02) !important;
+  z-index: 100 !important;
+}
+
+.headline-card .paper-name {
+  font-family: 'Special Elite', serif;
+  font-size: 12px;
+  color: #555;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  border-bottom: 2px solid #000;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+.headline-card .headline {
+  font-family: 'Special Elite', serif;
+  font-size: 15px;
+  color: #000;
+  line-height: 1.3;
+  font-weight: bold;
+}
+
+.headline-card .headline .highlight {
+  background: #ffff00;
+  padding: 0 2px;
+}
+
+/* ============================================================
+   LOGIC CHAIN
+   ============================================================ */
+
+.logic-chain {
+  background: var(--paper);
+  padding: 20px;
+  position: relative;
+  box-shadow: 4px 6px 15px rgba(0,0,0,0.5);
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.logic-chain:hover {
+  transform: scale(1.01) rotate(0deg) !important;
+  z-index: 100 !important;
+}
+
+.logic-title {
+  font-family: 'Special Elite', serif;
+  margin-bottom: 12px;
+  font-size: 15px;
+  color: var(--ink);
+  border-bottom: 1px solid var(--dark-paper);
+  padding-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.logic-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px dashed var(--dark-paper);
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.logic-item:last-of-type { border-bottom: none; }
+
+.logic-conclusion {
+  background: rgba(200,0,0,0.1);
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.logic-bullet {
+  width: 22px;
+  height: 22px;
+  background: var(--red);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'VT323', monospace;
+  font-size: 16px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.logic-bullet-green { background: #006600; }
+
+.logic-arrow {
+  text-align: center;
+  font-size: 24px;
+  color: var(--red);
+  padding: 4px 0;
+}
+
+/* ============================================================
+   COUNTDOWN CARD
+   ============================================================ */
+
+.countdown-card {
+  background: #000;
+  border: 2px solid var(--red);
+  padding: 20px;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 0 20px rgba(200,0,0,0.3), 4px 6px 15px rgba(0,0,0,0.5);
+}
+
+.countdown-label {
+  font-family: 'VT323', monospace;
+  font-size: 14px;
+  color: #666;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.countdown-display {
+  font-family: 'VT323', monospace;
+  font-size: 48px;
+  color: var(--red);
+  text-shadow: 0 0 15px rgba(200,0,0,0.6);
+  letter-spacing: 4px;
+}
+
+.countdown-sub {
+  font-family: 'Courier Prime', monospace;
+  font-size: 11px;
+  color: #555;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   CONSPIRACY METER
+   ============================================================ */
+
+.conspiracy-meter {
+  background: var(--paper);
+  padding: 20px;
+  position: relative;
+  z-index: 2;
+  box-shadow: 4px 6px 15px rgba(0,0,0,0.5);
+  margin: 30px 0;
+}
+
+.meter-title {
+  font-family: 'Special Elite', serif;
+  font-size: 16px;
+  color: var(--ink);
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.meter-bar-wrap {
+  background: #333;
+  height: 28px;
+  border: 2px solid #000;
+  position: relative;
+  overflow: hidden;
+}
+
+.meter-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #006600, #aacc00, #cc8800, var(--red));
+  transition: width 1.5s ease;
+  position: relative;
+}
+
+.meter-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 20px,
+    rgba(255,255,255,0.1) 20px,
+    rgba(255,255,255,0.1) 22px
+  );
+}
+
+.meter-labels {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'VT323', monospace;
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+}
+
+.meter-value {
+  font-family: 'VT323', monospace;
+  font-size: 32px;
+  color: var(--red);
+  text-align: center;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   DEBUNKED OVERLAY
+   ============================================================ */
+
+.debunked { position: relative; }
+
+.debunked::after {
+  content: '✗ DEBUNKED';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  color: rgba(0, 150, 0, 0.6);
+  font-family: 'Special Elite', serif;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 4px;
+  border: 3px solid rgba(0,150,0,0.5);
+  padding: 4px 10px;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   VERDICT CARD
+   ============================================================ */
+
+.verdict-card {
+  max-width: 700px;
+  margin: 0 auto 40px;
+  position: relative;
+  z-index: 2;
+  transform: rotate(-0.5deg);
+}
+
+.verdict-title {
+  font-size: 20px !important;
+  color: var(--red) !important;
+}
+
+.verdict-body {
+  font-size: 15px !important;
+  line-height: 1.8 !important;
+  margin-top: 10px;
+}
+
+.verdict-list {
+  margin-top: 12px;
+  padding-left: 20px;
+  line-height: 2;
+  font-size: 14px;
+}
+
+.verdict-terminal {
+  background: #000;
+  color: #0f0;
+  font-family: 'VT323', monospace;
+  font-size: 18px;
+  padding: 12px;
+  margin-top: 16px;
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.85);
+  z-index: 10000;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-overlay.active { display: flex; }
+
+.modal-box {
+  background: var(--paper);
+  max-width: 600px;
+  width: 100%;
+  padding: 30px;
+  position: relative;
+  box-shadow: 0 0 60px rgba(0,0,0,0.9);
+  border-top: 6px solid var(--red);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.modal-close {
+  position: absolute;
+  top: 12px; right: 16px;
+  font-size: 28px;
+  cursor: pointer;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.modal-close:hover { color: var(--red); }
+
+.modal-box h2 {
+  font-family: 'Special Elite', serif;
+  color: var(--red);
+  font-size: 22px;
+  margin-bottom: 16px;
+  padding-right: 30px;
+}
+
+.modal-box p {
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.7;
+  margin-bottom: 10px;
+}
+
+.modal-box ul {
+  padding-left: 18px;
+  font-size: 14px;
+  color: var(--ink);
+  line-height: 1.8;
+}
+
+.modal-verdict {
+  background: #000;
+  color: #0f0;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  padding: 12px;
+  margin-top: 16px;
+  letter-spacing: 2px;
+  text-align: center;
+}
+
+/* ============================================================
+   REDACTED TEXT
+   ============================================================ */
+
+.redacted {
+  background: #000;
+  color: transparent;
+  user-select: none;
+  border-radius: 2px;
+  padding: 0 4px;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline;
+}
+
+.redacted:hover,
+.redacted.revealed {
+  background: #cc0000;
+  color: #ffff00;
+}
+
+/* ============================================================
+   SECTION LABELS
+   ============================================================ */
+
+.section-tape {
+  background: var(--yellow);
+  color: #000;
+  font-family: 'VT323', monospace;
+  font-size: 20px;
+  letter-spacing: 6px;
+  padding: 8px 20px;
+  text-align: center;
+  margin: 30px 0 20px;
+  transform: rotate(-0.5deg);
+  box-shadow: 2px 4px 10px rgba(0,0,0,0.4);
+  position: relative;
+  z-index: 2;
+  text-transform: uppercase;
+}
+
+.section-tape.dark-tape  { background: #333; color: var(--yellow); }
+.section-tape.red-tape   { background: var(--red); color: #fff; }
+
+/* ============================================================
+   MISC INLINE ELEMENTS
+   ============================================================ */
+
+.big-question {
+  font-family: 'Special Elite', serif;
+  font-size: clamp(32px, 6vw, 72px);
+  color: var(--red);
+  text-align: center;
+  text-shadow: 3px 3px 0 #000;
+  letter-spacing: 4px;
+  padding: 30px 0;
+  position: relative;
+  z-index: 2;
+  line-height: 1.1;
+}
+
+.alert-banner {
+  background: var(--red);
+  color: #fff;
+  font-family: 'VT323', monospace;
+  font-size: 22px;
+  padding: 10px 20px;
+  text-align: center;
+  letter-spacing: 4px;
+  position: relative;
+  z-index: 2;
+  margin-bottom: 20px;
+  animation: alertFlash 2s ease-in-out infinite;
+}
+
+@keyframes alertFlash {
+  0%,100% { background: var(--red); }
+  50%     { background: #880000; }
+}
+
+.floating-q {
+  position: absolute;
+  font-family: 'Special Elite', serif;
+  color: rgba(200,0,0,0.2);
+  font-size: 100px;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+}
+
+.circle-mark {
+  display: inline-block;
+  border: 3px solid var(--red);
+  border-radius: 50%;
+  padding: 2px 8px;
+  transform: rotate(-2deg);
+}
+
+.scribble {
+  font-family: 'Special Elite', serif;
+  color: #8b0000;
+  font-size: 14px;
+  font-style: italic;
+  margin-top: 8px;
+}
+
+.quote-tape {
+  background: #fff;
+  border-left: 5px solid var(--red);
+  padding: 12px 16px;
+  margin: 10px 0;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink);
+}
+
+.quote-tape cite {
+  font-style: normal;
+  font-weight: bold;
+  font-size: 11px;
+  color: #666;
+  display: block;
+  margin-top: 6px;
+}
+
+/* ============================================================
+   ANIMATIONS
+   ============================================================ */
+
+.blink { animation: blinker 1.2s step-end infinite; }
+
+@keyframes blinker {
+  0%,100% { opacity: 1; }
+  50%     { opacity: 0; }
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+
+.site-footer {
+  background: #000;
+  border-top: 3px solid var(--red);
+  padding: 30px 20px;
+  text-align: center;
+  font-family: 'Courier Prime', monospace;
+}
+
+.footer-disclaimer {
+  color: #0f0;
+  font-size: 18px;
+  font-family: 'VT323', monospace;
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+  animation: flicker 3s infinite;
+}
+
+.footer-text {
+  color: #555;
+  font-size: 12px;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
